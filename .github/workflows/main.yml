@@ -1,0 +1,2 @@
+- name: advent-readme-stars
+  uses: k2bd/advent-readme-stars@v1.0.3
