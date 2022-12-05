@@ -18,9 +18,7 @@ def isContained(pair):
 def isOverlap(pair):
   r1 = pair[0]
   r2 = pair[1]
-  if r1[0] >= r2[0] and r1[1] <= r2[1]:
-    return 1
-  elif r1[0] >= r2[0] and r1[0] <= r2[1]:
+  if r1[0] >= r2[0] and r1[0] <= r2[1]:
     return 1
   elif r1[0] <= r2[1] and r1[1] >= r2[0]:
     return 1
