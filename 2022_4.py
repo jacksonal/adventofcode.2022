@@ -11,30 +11,36 @@ def isContained(pair):
   r1 = pair[0]
   r2 = pair[1]
   if r1[0] >= r2[0] and r1[1] <= r2[1]:
-    return 1
+    return True
   else:
-    return 0
+    return False
 
 def isOverlap(pair):
   r1 = pair[0]
   r2 = pair[1]
   if r1[0] >= r2[0] and r1[0] <= r2[1]:
-    return 1
+    return True
   elif r1[0] <= r2[1] and r1[1] >= r2[0]:
-    return 1
+    return True
   else:
-    return 0
+    return False
 
 input = getLinesFromFile('./input.txt')
+totalAssigned = len(input)
 print('part 1')
 start = timer()
 #convert input to integer range pairs. also sort them so the smaller window is always first
 pairs = [sorted([[int(id) for id in r.split('-')] for r in a.split(',')],key=lambda x: x[1]-x[0]) for a in input]
-containedCount = sum([isContained(pair) for pair in pairs])
-end = timer()
+filteredPairs = filter(lambda x: not isContained(x),pairs) #all pairs that are not fully contained
+notFullyContainedCount = len(list(filter(lambda x: not isContained(x),pairs,)))
+containedCount = totalAssigned - notFullyContainedCount  
+end1 = timer()
+
+overlaps = filter(lambda x: isOverlap(x),filteredPairs) #of the remaining pairs. filter out the ones with NO OVERLAP
+overlapCount = containedCount +  len(list(overlaps)) 
+end2 = timer()
+
 print(containedCount)
-print(f'{(end-start)*1000000} µs')
-overlapCount = sum([isOverlap(pair) for pair in pairs])
-end = timer()
+print(f'{(end1-start)*1000000} µs')
 print(overlapCount)
-print(f'{(end-start)*1000000} µs')
+print(f'{(end2-start)*1000000} µs')
