@@ -16,6 +16,7 @@ from util import getLinesFromFile
 from timeit import default_timer as timer
 
 def runInstructionP1(instr, stackMap):
+  """move crates 1 at a time"""
   args = instr.split()[1::2]
   numCrates = int(args[0])
   originStack = args[1]
@@ -25,6 +26,7 @@ def runInstructionP1(instr, stackMap):
     stackMap[targetStack].append(stackMap[originStack].pop())
 
 def runInstructionP2(instr, stackMap):
+  """move crates in groups"""
   args = instr.split()[1::2]
   numCrates = int(args[0])
   originStack = args[1]
@@ -34,6 +36,7 @@ def runInstructionP2(instr, stackMap):
   stackMap[originStack] = stackMap[originStack][:-numCrates]
 
 def initStacks(rawStacks):
+  """parse input into data structures"""
   rawStackIds = rawStacks[-1].split()
   stacks = {}
   for sid in rawStackIds:
@@ -51,7 +54,7 @@ rawStacks = []
 rawInstructions = []
 currList = rawStacks
 for l in lines:
-  if l == '':
+  if l == '': #end of section, begin capturing instruction set
     currList = rawInstructions
   else:
     currList.append(l)
@@ -66,6 +69,7 @@ for instr in rawInstructions:
 end = timer()
 print(''.join([stacks[id][-1] for id in sorted(stacks.keys())]))
 print(f'{(end-start) * 1000000}  µs')
+
 #reset for part 2: maintain order of popped items on next stack.
 # create stack structures
 stacks = initStacks(rawStacks)
