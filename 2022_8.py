@@ -13,7 +13,6 @@ class Tree:
     self.down = None
     self.left = None
     self.right = None
-    self.seen = False
     self.scenicScore = 0
   
   def isSeenFrom(self, direction, neighbor, height):
