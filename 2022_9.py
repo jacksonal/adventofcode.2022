@@ -72,7 +72,7 @@ for instr in instructions:
       visited.add(tailPos)
 result = len(visited)
 end = timer()
-print(result, f'{(end-begin) * 1000000} µs')
+print('part 1:',result, f'{(end-begin) * 1000000} µs')
 
 # part 2: now rope has 10 knots. each adjacent to the next. 
 # same problem as before but with a longer rope. 
@@ -95,4 +95,4 @@ for instr in instructions:
 
 result = len(visited)
 end = timer()
-print(result, f'{(end-begin) * 1000000} µs')
+print('part 2:',result, f'{(end-begin) * 1000000} µs')
