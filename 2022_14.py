@@ -7,6 +7,7 @@
 
 from util import getLinesFromFile
 import sys
+
 def isVertical(p1,p2):
   return p1[0] == p2[0] and p1[1] != p2[1]
 
@@ -18,6 +19,20 @@ def getIncrementer(x1,x2):
     return range(0,x2 - x1 + 1)
   else:
     return range(x2 - x1, 1)
+
+def printTiles(xBounds,yBounds,blockers):
+  for y in range(yBounds[0],yBounds[1] + 1):
+    row = []
+    for x in range(xBounds[0],xBounds[1] + 1):
+      #print(x,y)
+      if (x,y) in blockers:
+        row.append('#')
+      else:
+        row.append('.')
+    print(''.join(row))
+
+def canOccupy(tile, blockedTiles):
+  return tile not in blockedTiles
 
 lines = getLinesFromFile('./input.txt')
 
@@ -32,6 +47,7 @@ for path in lines: #track blocked tiles
     if point[1] > lowestY:
       #print('lower point found', point)
       lowestY = point[1]
+      caveFloor = lowestY + 2
     if point[0] < lowestX:
       lowestX = point[0]
     if point[0] > highestX:
@@ -52,47 +68,42 @@ for path in lines: #track blocked tiles
           #print('blocking', tile)
           blocked.add(tile)
     prevPoint = point
-    
-for y in range(0,lowestY + 1):
-  row = []
-  for x in range(lowestX,highestX + 1):
-    #print(x,y)
-    if (x,y) in blocked:
-      row.append('#')
-    else:
-      row.append('.')
-  print(''.join(row))
+
+#printTiles((lowestX,highestX),(0,lowestY),blocked)
 
 # start droppin sand
 origin = (500,0)
 sandLoc = origin
 grainCount = 0
 while True:
-  if sandLoc[1] > lowestY:
-    break #into the void
-  if (sandLoc[0], sandLoc[1] + 1) not in blocked:
+  #if sandLoc[1] > lowestY:
+   # break #into the void
+  
+  if sandLoc[1] + 1 == caveFloor:
+    #come to rest
+    blocked.add(sandLoc)
+    grainCount += 1
+    sandLoc = origin
+    continue
+
+  if canOccupy((sandLoc[0], sandLoc[1] + 1),blocked): #check below
     sandLoc = (sandLoc[0], sandLoc[1] + 1)
-  elif (sandLoc[0] - 1, sandLoc[1] + 1) not in blocked:
+  elif canOccupy((sandLoc[0] - 1, sandLoc[1] + 1), blocked): #check diagonal left
     sandLoc = (sandLoc[0] - 1, sandLoc[1] + 1)
-  elif (sandLoc[0] + 1, sandLoc[1] + 1) not in blocked:
+  elif canOccupy((sandLoc[0] + 1, sandLoc[1] + 1), blocked): #check diagonal right
     sandLoc = (sandLoc[0] + 1, sandLoc[1] + 1)
   else:
     # we rest
     blocked.add(sandLoc)
     grainCount += 1
+    if sandLoc == origin:
+      break #no more sand can be dropped
     sandLoc = origin
 #print(sorted(blocked,key=lambda x: x[1]))
 
 #display the tiles
 #print(lowestX,highestX)
-print('FINAL')
-for y in range(0,lowestY + 1):
-  row = []
-  for x in range(lowestX,highestX + 1):
-    #print(x,y)
-    if (x,y) in blocked:
-      row.append('#')
-    else:
-      row.append('.')
-  print(''.join(row))
+#print('FINAL')
+#printTiles((lowestX,highestX),(0,lowestY),blocked)
+
 print(grainCount)
