@@ -15,7 +15,7 @@ def isHorizontal(p1,p2):
 
 def getIncrementer(x1,x2):
   if x1 < x2:
-    return range(0,x2 - x1)
+    return range(0,x2 - x1 + 1)
   else:
     return range(x2 - x1, 1)
 
@@ -37,7 +37,7 @@ for path in lines: #track blocked tiles
     if point[0] > highestX:
       highestX = point[0]
 
-    #print(prevPoint, '->', point)
+    print(prevPoint, '->', point)
     if prevPoint is not None:
       if isVertical(prevPoint,point):
         #print('vertical segment')
